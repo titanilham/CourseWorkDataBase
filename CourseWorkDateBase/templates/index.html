@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini blog</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="shortcut icon" href="/static/images/icon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="theme-toggle">
+        
+            <input type="checkbox" id="themeSwitch" class="themeSwitch">
+            <label class="labelSwitch"for="themeSwitch" data-tippy-content="Change the theme"></label>
+        
+    </div>
+    <div class="container">
+        <h1 class="header">Mini blog</h1>
+        <button id="addBtn" class="add-button" data-tippy-content="New note">+</button>
+        <div id="addForm" class="form hidden">
+            <form action="/add" method="POST">
+                <input type="text" name="title" placeholder="Title" required>
+                <textarea name="content" placeholder="Note text" required></textarea>
+                <button type="submit" class="submit-button">Add</button>
+            </form>
+        </div>
+        <div class="posts">
+            {% for post in posts %}
+            <div class="post">
+                <div class="post-header">
+                    <div class="post-actions">
+                    </div>
+                </div>
+                <div class="post-content">{{ post[2] }}</div>
+                <form action="/edit/{{ post[0] }}" method="POST" class="edit-form">
+                    <input type="text" name="title" autocomplete="off" value="{{ post[1] }}" required>
+                    <textarea name="content" required>{{ post[2] }}</textarea>
+                    
+                    <button type="submit" class="submit-button">Save</button>
+                </form>
+                <form action="/delete/{{ post[0] }}" method="GET">
+                        
+                        <button class="action-button delete" data-tippy-content="Delete"></button>
+                        
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+     <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+<script>
+
+    // Кнопка добавления поста
+    document.getElementById("addBtn").onclick = function () {
+        document.getElementById("addForm").classList.toggle("hidden");
+    }
+
+    // Тема — переключение и сохранение в localStorage
+    const themeSwitch = document.getElementById('themeSwitch');
+    const isDark = localStorage.getItem('theme') === 'dark';
+
+    if (isDark) {
+        document.body.classList.add('dark-theme');
+        themeSwitch.checked = true;
+    }
+
+    themeSwitch.addEventListener('change', () => {
+        document.body.classList.toggle('dark-theme');
+        if (document.body.classList.contains('dark-theme')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    );
+    tippy('[data-tippy-content]', {
+    theme: 'custom',
+    animation: 'fade', 
+    duration: [300, 200],
+    
+  });
+</script>
+
+</body>
+</html>
