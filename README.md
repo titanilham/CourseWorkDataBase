@@ -24,7 +24,7 @@ git clone https://github.com/titanilham/CourseWorkDateBase.git
 pip install -r requirements.txt
 ```
 
-### Launching the app
+### Launching the app:
 
 ```
 cd .\CourseWorkDateBase\
